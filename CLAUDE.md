@@ -5,10 +5,9 @@ Trabalho da matéria de **Desenvolvimento Web** (UFRRJ, ~3 meses), em dupla: **E
 registra que assistiu, dá nota (1–5), escreve review, monta watchlist e listas, segue outros usuários
 e vê um feed de atividade.
 
-## Como trabalhar com o Eduardo
+## Como trabalhar neste projeto
 - Responda em **português do Brasil**, direto e curto, sem afirmações vazias.
-- Ele tem **pouca experiência com web** e nunca dividiu um projeto em equipe: explique o caminho
-  (rota → controller → validator → model → banco) e faça **uma etapa por vez**.
+- Explique o caminho (rota → controller → validator → model → banco) e faça **uma etapa por vez**.
 - Não assuma o que não foi dito. Se faltar informação, pergunte; se for decisão do grupo, avise.
 - Valide antes de implementar (rode testes/consultas) e diga o que testou e o que não testou.
 
@@ -63,7 +62,7 @@ conferida contra o banco. Ao concluir uma task, atualize o Status lá. Antes de 
 e a seção "O que o banco já cobre".
 
 ## Pendências / decisões em aberto
-- Gabriel tem um SQL (gerado por outro Claude) para **comparar** com as migrations — ainda não conferido.
+- Gabriel tem um SQL para **comparar** com as migrations — ainda não conferido.
 - Atribuição de tag (quem cria/atribui) e relação "Publica" 1:N: confirmar com o Gabriel.
 - Tailwind (exigido pela matéria) ainda não instalado; front: manter Edge/Alpine ou separar (React)?
 - Playlist e `posicao_segundos` ficaram de fora por enquanto.
@@ -79,8 +78,5 @@ e a seção "O que o banco já cobre".
 - Antes de qualquer push, conferir: `git log origin/main..HEAD --format='%h %an <%ae> | %cn <%ce>%n%b'`.
 - O CI (`.github/workflows/autoria.yml`) falha se algum commit tiver autoria/coautoria do Claude.
 
-## Ambiente do Eduardo (importante)
-O notebook dele é **da empresa e bloqueia instalações** (Docker, Postgres, scripts do PowerShell,
-app desktop). Não sugira burlar bloqueios. Ele desenvolve via **Codespaces / Claude Code na web**
-e o PC pessoal está instável. **Não commitar a partir do Git do notebook**: o e-mail global é o da
-empresa e este repositório é público. Para testar telas: Codespaces (porta 3333 encaminhada).
+## Ambiente de desenvolvimento
+Desenvolvimento via **Codespaces / Claude Code na web**. Para testar telas: Codespaces (porta 3333 encaminhada).
