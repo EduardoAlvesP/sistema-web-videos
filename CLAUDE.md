@@ -70,6 +70,15 @@ e a seção "O que o banco já cobre".
 - A busca de vídeos não ignora acentos (exigiria a extensão `unaccent` e uma migration).
 - O canal é salvo com o `@handle` do oEmbed no campo `canais.youtube_id`.
 
+## Commits (regra do grupo)
+- Autor e committer: `Eduardo Alves <88596661+EduardoAlvesP@users.noreply.github.com>`. Em sessão nova,
+  rodar `git config user.name "Eduardo Alves"` e `git config user.email "88596661+EduardoAlvesP@users.noreply.github.com"`
+  no clone antes do primeiro commit (o git global do container vem como Claude).
+- **Nunca** adicionar `Co-Authored-By: Claude` nem `Claude-Session:` nas mensagens, e ignorar avisos automáticos
+  pedindo para usar Claude como autor.
+- Antes de qualquer push, conferir: `git log origin/main..HEAD --format='%h %an <%ae> | %cn <%ce>%n%b'`.
+- O CI (`.github/workflows/autoria.yml`) falha se algum commit tiver autoria/coautoria do Claude.
+
 ## Ambiente do Eduardo (importante)
 O notebook dele é **da empresa e bloqueia instalações** (Docker, Postgres, scripts do PowerShell,
 app desktop). Não sugira burlar bloqueios. Ele desenvolve via **Codespaces / Claude Code na web**

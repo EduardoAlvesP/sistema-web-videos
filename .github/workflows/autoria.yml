@@ -1,0 +1,23 @@
+name: Autoria dos commits
+on:
+  push:
+  pull_request:
+jobs:
+  autoria:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Nenhum commit com autoria/coautoria do Claude
+        run: |
+          ruins=$(git log --format='%h %an <%ae> | %cn <%ce>%n%B%n---' HEAD \
+            | grep -iE 'anthropic\.com|^Co-Authored-By: *Claude|^Claude-Session:' || true)
+          if [ -n "$ruins" ]; then
+            echo "Commits com autoria do Claude encontrados:"
+            git log --format='%h %an <%ae> | %cn <%ce> %s' HEAD \
+              | grep -iE 'anthropic\.com' || true
+            git log --format='%h %s' -i --grep='Co-Authored-By: *Claude' --grep='^Claude-Session:' -E HEAD || true
+            exit 1
+          fi
+          echo "OK: nenhum commit com autoria do Claude."
