@@ -358,7 +358,8 @@
   /* fita (decorativa) apoiada em cima da fenda */
   .fita {
     @apply pointer-events-none absolute inset-x-2 z-10 h-[116px] border-2 border-tinta;
-    bottom: calc(100% - 2px);
+    /* parada 16px acima da fenda */
+    bottom: calc(100% + 14px);
     background: #3b2044;
     box-shadow: 0 7px 10px -2px rgba(0, 0, 0, 0.55);
     transition:
@@ -371,7 +372,7 @@
     background: linear-gradient(transparent, rgba(14, 8, 20, 0.75));
   }
   .fita--saindo {
-    transform: translateY(130px);
+    transform: translateY(146px);
     opacity: 0;
   }
   .fita__parafuso {
