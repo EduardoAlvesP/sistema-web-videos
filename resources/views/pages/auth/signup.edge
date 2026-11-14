@@ -1,60 +1,108 @@
-@layouts.auth()
-  <h1 class="auth__title">Crie sua conta</h1>
-  <p class="auth__sub">Registre o que você assiste no YouTube.</p>
-  @form({
-    route: 'new_account.store',
-    method: 'POST',
-    class: 'auth__form',
-    'x-data': '{ submitting: false }',
-    'x-on:submit': 'submitting = true',
-  })
-    @field.root({ name: 'nome' })
-      @!field.label({ text: 'Nome' })
-      @!input.control({ autocomplete: 'name', placeholder: 'Seu nome' })
-      @!field.error()
-    @end
-    @field.root({ name: 'email' })
-      @!field.label({ text: 'E-mail' })
-      @!input.control({
-        type: 'email',
-        autocomplete: 'email',
-        placeholder: 'voce@exemplo.com',
-      })
-      @!field.error()
-    @end
-    @field.root({ name: 'password' })
-      @!field.label({ text: 'Senha' })
-      @!input.control({
-        type: 'password',
-        autocomplete: 'new-password',
-        placeholder: '••••••••',
-      })
-      @!field.error()
-    @end
-    @field.root({ name: 'passwordConfirmation' })
-      @!field.label({ text: 'Confirme a senha' })
-      @!input.control({
-        type: 'password',
-        autocomplete: 'new-password',
-        placeholder: '••••••••',
-      })
-      @!field.error()
-    @end
-    @!button({
-      text: 'Criar conta',
-      type: 'submit',
-      block: true,
-      style: 'margin-top: 4px;',
-      'x-bind:disabled': 'submitting',
-      'x-text': "submitting ? 'Um momento…' : 'Criar conta'",
-    })
-  @end
+@layouts.auth({ title: 'Criar conta' })
+  <div
+    class="grid w-full max-w-[448px] gap-10 md:max-w-[860px] md:grid-cols-[minmax(0,1fr)_300px] md:gap-12"
+    x-data="{
+      nome: '',
+      desde: new Date().toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }).replace('. de ', '/'),
+      }"
+  >
+    <div>
+      <div class="flex flex-col">
+        <span class="aba">Ficha de admissão</span>
+        <div class="box p-5 sm:p-7">
+          <h1 class="font-display text-[26px] leading-tight sm:text-[30px]">Crie sua conta</h1>
+          @form({
+            route: 'new_account.store',
+            method: 'POST',
+            class: 'mt-6 flex flex-col gap-5',
+            'x-data': '{ submitting: false }',
+            'x-on:submit': 'submitting = true',
+          })
+            @field.root({ name: 'nome' })
+              @!field.label({ text: 'Nome' })
+              @!input.control({
+                autocomplete: 'name',
+                placeholder: 'Seu nome',
+                'x-init': 'nome = $el.value',
+                'x-on:input': 'nome = $el.value',
+              })
+              @!field.error()
+            @end
+            @field.root({ name: 'email' })
+              @!field.label({ text: 'E-mail' })
+              @!input.control({
+                type: 'email',
+                autocomplete: 'email',
+                placeholder: 'voce@exemplo.com',
+              })
+              @!field.error()
+            @end
+            @field.root({ name: 'password' })
+              @!field.label({ text: 'Senha' })
+              @!input.control({
+                type: 'password',
+                autocomplete: 'new-password',
+                placeholder: '••••••••',
+              })
+              @!field.error()
+            @end
+            @field.root({ name: 'passwordConfirmation' })
+              @!field.label({ text: 'Confirme a senha' })
+              @!input.control({
+                type: 'password',
+                autocomplete: 'new-password',
+                placeholder: '••••••••',
+              })
+              @!field.error()
+            @end
+            @!button({
+              text: 'Criar conta',
+              type: 'submit',
+              block: true,
+              class: 'mt-2',
+              'x-bind:disabled': 'submitting',
+              'x-text': "submitting ? 'Um momento…' : 'Criar conta'",
+            })
+          @end
+        </div>
+      </div>
 
-  <p class="auth__foot">
-    Já tem uma conta?
+      <p class="mt-8 text-center">
+        
+        Já tem conta?
 
-    @link({ route: 'session.create', class: 'il' })
-      Entrar
-    @end
-  </p>
+        @link({ route: 'session.create', class: 'il' })
+          Entrar
+        @end
+      </p>
+    </div>
+    {{-- Crachá: prévia do nome digitado (só visual, não é enviado). --}}
+    <aside class="hidden md:block md:pt-[46px]" aria-hidden="true">
+      <p class="mb-3 text-sm text-apagado">Seu crachá</p>
+      <div class="box">
+        <div class="h-5 border-b-2 border-tinta bg-rosa"></div>
+        <div class="flex gap-4 p-5">
+          <svg class="flex-none border-2 border-tinta" width="88" height="108" viewBox="0 0 88 108">
+            <rect width="88" height="108" fill="#7A2A4F" />
+            <circle cx="44" cy="46" r="19" fill="#E998AC" />
+            <path d="M8 108C8 84 24 72 44 72S80 84 80 108Z" fill="#E998AC" />
+          </svg>
+          <div class="min-w-0">
+            <p class="truncate text-lg font-bold" x-text="nome.trim() || 'Seu nome'">Seu nome</p>
+            <p class="mt-1 font-mono text-sm text-apagado">
+              Membro desde
+              <span x-text="desde"></span>
+            </p>
+            <svg class="mt-3" width="46" height="24" viewBox="0 0 46 24">
+              <path d="M0 0L20 12L0 24Z" fill="#7A2A4F" />
+              <path d="M13 0L33 12L13 24Z" fill="#D6336C" />
+              <path d="M26 0L46 12L26 24Z" fill="#2A1630" />
+              <path d="M13 7.8L20 12L13 16.2Z" fill="#AD385D" />
+              <path d="M26 7.8L33 12L26 16.2Z" fill="#5B2448" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
 @end

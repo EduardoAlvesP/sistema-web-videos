@@ -1,9 +1,14 @@
 @layouts.app({ title: 'Acesso negado' })
-  @page()
-    <h1>Acesso negado</h1>
-    <p>Você não tem permissão para ver esta página.</p>
-    @link({ route: 'dashboard' })
-      Voltar ao dashboard
-    @end
-  @end
+  <div class="flex w-full justify-center px-4 py-16">
+    <article class="box w-full max-w-[580px] p-6 sm:p-10">
+      <span class="border-2 border-erro px-2.5 py-0.5 font-mono font-bold text-erro">403</span>
+      <h1 class="mt-6 font-display text-2xl sm:text-3xl">Acesso negado</h1>
+      <p class="mt-3 text-apagado">Você não tem permissão para ver esta página.</p>
+      <div class="mt-7">
+        @link({ route: 'home', class: 'btn btn--primary' })
+          Voltar ao início
+        @end
+      </div>
+    </article>
+  </div>
 @end

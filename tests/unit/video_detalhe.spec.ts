@@ -34,7 +34,7 @@ test.group('Detalhe do vídeo (T08)', (group) => {
     resposta.assertTextIncludes('src="https://www.youtube.com/embed/abcdefghijk"')
     resposta.assertTextIncludes('Canal Detalhe')
     resposta.assertTextIncludes('Pub')
-    resposta.assertTextIncludes('Em breve')
+    resposta.assertTextIncludes('Ainda sem notas')
   })
 
   test('vídeo inexistente dá 404', async ({ client }) => {

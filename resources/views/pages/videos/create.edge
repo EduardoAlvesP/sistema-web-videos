@@ -1,24 +1,96 @@
 @layouts.app({ title: 'Enviar vídeo' })
-  @page()
-    <h1>Enviar vídeo</h1>
-    <p>Cole o link ou o ID de um vídeo do YouTube.</p>
-    @form({
-      route: 'videos.store',
-      method: 'POST',
-      'x-data': '{ submitting: false }',
-      'x-on:submit': 'submitting = true',
-    })
-      @field.root({ name: 'url' })
-        @!field.label({ text: 'URL ou ID do vídeo' })
-        @!input.control({ placeholder: 'https://www.youtube.com/watch?v=...' })
-        @!field.error()
-      @end
-      @!button({
-        text: 'Enviar',
-        type: 'submit',
-        'x-bind:disabled': 'submitting',
-        'x-text': "submitting ? 'Buscando no YouTube…' : 'Enviar'",
+  <div class="page">
+    <div class="mx-auto w-full max-w-[640px]">
+      <h1 class="font-display text-[32px] leading-tight">Arquivar vídeo</h1>
+      <p class="mt-1">Cole o link ou o ID de um vídeo do YouTube.</p>
+      @form({
+        route: 'videos.store',
+        method: 'POST',
+        class: 'mt-3.5 pt-[120px]',
+        'x-data': '{ submitting: false }',
+        'x-on:submit': 'submitting = true',
       })
-    @end
-  @end
+        @field.root({ name: 'url' })
+          <div class="box bg-lilas">
+            {{-- tampo com a fenda --}}
+            <div
+              class="flex justify-center border-b-2 border-tinta py-2.5 shadow-[inset_0_2px_0_#F2EAF3] bg-[#DCCEDE]"
+            >
+              <div class="relative w-[88%] sm:w-[68%]">
+                <div class="fita" x-bind:class="{ 'fita--saindo': submitting }" aria-hidden="true">
+                  <span class="fita__parafuso left-1.5"></span>
+                  <span class="fita__parafuso right-1.5"></span>
+                  <div class="absolute inset-x-5 top-5 border-2 border-tinta bg-white font-mono">
+                    <div
+                      class="flex justify-between bg-rosa px-2.5 py-0.5 text-[13px] font-bold tracking-[.08em] text-white"
+                    >
+                      <span>VIDEOBOXD</span>
+                      <span>T-120</span>
+                    </div>
+                    <div
+                      class="fita__pauta h-[28px] overflow-hidden border-t-2 border-tinta px-2.5 text-sm leading-[26px] text-apagado"
+                    >
+                      seu próximo vídeo
+                    </div>
+                  </div>
+                </div>
+                <div class="fenda">
+                  <svg
+                    class="pointer-events-none absolute inset-0 size-full"
+                    viewBox="0 0 400 30"
+                    preserveAspectRatio="none"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <rect
+                      x="10"
+                      y="7"
+                      width="380"
+                      height="20"
+                      fill="none"
+                      stroke="#3B2044"
+                      stroke-width="1"
+                    />
+                    <line x1="0" y1="0" x2="10" y2="7" stroke="#4A2A55" stroke-width="1" />
+                    <line x1="400" y1="0" x2="390" y2="7" stroke="#4A2A55" stroke-width="1" />
+                    <line x1="0" y1="30" x2="10" y2="27" stroke="#5B3468" stroke-width="1" />
+                    <line x1="400" y1="30" x2="390" y2="27" stroke="#5B3468" stroke-width="1" />
+                    <line x1="10" y1="27" x2="390" y2="27" stroke="#5B3468" stroke-width="1" />
+                  </svg>
+                  @!input.control({ placeholder: 'cole o link aqui' })
+                </div>
+              </div>
+            </div>
+            {{-- corpo --}}
+            <div class="flex flex-col gap-2 px-[18px] pt-4 pb-[18px]">
+              @!field.label({ text: 'URL ou ID do vídeo', class: 'text-sm' })
+              @!field.error()
+              <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-3">
+                <span
+                  class="size-3 shrink-0 rounded-full border-2 border-tinta bg-rosa"
+                  aria-hidden="true"
+                ></span>
+                <span class="font-mono text-[15px] font-bold tracking-[.08em]">INSERIR FITA</span>
+                <span
+                  class="min-w-[11ch] border-2 border-tinta bg-[#1B1220] px-2.5 py-1 text-center font-mono text-lg leading-none text-[#E998AC]"
+                  role="status"
+                  x-text="submitting ? 'BUSCANDO…' : '--:--'"
+                >
+                  --:--
+                </span>
+                <span class="ml-auto">
+                  @!button({
+                    text: 'Enviar',
+                    type: 'submit',
+                    class: 'mb-0',
+                    'x-bind:disabled': 'submitting',
+                  })
+                </span>
+              </div>
+            </div>
+          </div>
+        @end
+      @end
+    </div>
+  </div>
 @end

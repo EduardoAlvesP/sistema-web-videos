@@ -1,57 +1,85 @@
 @layouts.app({ title: 'Admin · Vídeos' })
-  @page()
-    <nav aria-label="Admin">
-      @link({ route: 'admin.videos.index' })
+  <div class="page min-w-0">
+    <nav aria-label="Admin" class="flex gap-5">
+      @link({ route: 'admin.videos.index', class: 'il' })
         Vídeos
       @end
-      @link({ route: 'admin.users.index' })
+      @link({ route: 'admin.users.index', class: 'il' })
         Usuários
       @end
     </nav>
-    <h1>Vídeos</h1>
-    @if(videos.length)
-      <table>
-        <thead>
-          <tr>
-            <th>Título</th>
-            <th>Canal</th>
-            <th>Publicado por</th>
-            <th>Data</th>
-          </tr>
-        </thead>
-        <tbody>
-          @each(video in videos)
-            <tr>
-              <td>
-                @link({ route: 'videos.show', routeParams: { id: video.id } })
-                  {{ video.titulo }}
+    <h1 class="mt-6 mb-7 font-display text-[28px] leading-tight sm:text-[32px]">Vídeos</h1>
+    <div class="flex min-w-0 flex-col">
+      <span class="aba">Vídeos</span>
+      <div class="box min-w-0">
+        @if(videos.length)
+          <div class="overflow-x-auto">
+            <table
+              class="tabela [&_td:nth-child(1)]:min-w-[200px] [&_td:nth-child(4)]:font-mono [&_td:nth-child(4)]:text-sm [&_td:nth-child(4)]:whitespace-nowrap"
+            >
+              <thead>
+                <tr>
+                  <th>Título</th>
+                  <th>Canal</th>
+                  <th>Publicado por</th>
+                  <th>Data</th>
+                </tr>
+              </thead>
+              <tbody>
+                @each(video in videos)
+                  <tr>
+                    <td>
+                      @link({
+                        route: 'videos.show',
+                        routeParams: { id: video.id },
+                        class: 'il',
+                      })
+                        {{ video.titulo }}
+                      @end
+                    </td>
+                    <td>{{ video.canal ? video.canal.nome : '—' }}</td>
+                    <td>{{ video.publicador ? video.publicador.nome : '—' }}</td>
+                    <td>{{ video.createdAt.toFormat('dd/MM/yyyy HH:mm') }}</td>
+                  </tr>
                 @end
-              </td>
-              <td>{{ video.canal ? video.canal.nome : '—' }}</td>
-              <td>{{ video.publicador ? video.publicador.nome : '—' }}</td>
-              <td>{{ video.createdAt.toFormat('dd/MM/yyyy HH:mm') }}</td>
-            </tr>
-          @end
-        </tbody>
-      </table>
-    @else
-      <p>Nenhum vídeo cadastrado.</p>
-    @end
+              </tbody>
+            </table>
+          </div>
+        @else
+          <p class="p-5 text-apagado">
+            <span>Nenhum vídeo cadastrado.</span>
+            @link({ route: 'videos.create', class: 'il' })
+              Envie o primeiro vídeo
+            @end
 
+            <span>colando o link do YouTube.</span>
+          </p>
+        @end
+      </div>
+    </div>
     @if(videos.hasPages)
-      <nav aria-label="Paginação">
+      <nav aria-label="Paginação" class="mt-8 flex flex-wrap items-center gap-4">
         @if(videos.currentPage > 1)
-          @link({ href: videos.getPreviousPageUrl() })
+          @link({
+            href: videos.getPreviousPageUrl(),
+            class: 'btn btn--secondary btn--sm',
+          })
             Anterior
           @end
         @end
-        <span>Página {{ videos.currentPage }} de {{ videos.lastPage }}</span>
+
+        <span class="font-mono text-sm">
+          Página
+          {{ videos.currentPage }}
+          de
+          {{ videos.lastPage }}
+        </span>
         @if(videos.hasMorePages)
-          @link({ href: videos.getNextPageUrl() })
+          @link({ href: videos.getNextPageUrl(), class: 'btn btn--secondary btn--sm' })
             Próxima
           @end
         @end
       </nav>
     @end
-  @end
+  </div>
 @end

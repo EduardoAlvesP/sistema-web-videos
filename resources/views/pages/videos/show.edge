@@ -1,57 +1,220 @@
 @layouts.app({ title: video.titulo })
-  @page()
-    <h1>{{ video.titulo }}</h1>
+  <div class="page">
+    <div class="grid items-start gap-x-10 gap-y-8 lg:grid-cols-[minmax(0,1fr)_340px]">
+      {{-- Coluna do player --}}
+      <div class="flex min-w-0 flex-col">
+        <span class="aba">{{ video.canal ? video.canal.nome : '—' }}</span>
+        <div class="box p-3.5">
+          <div style="position: relative; width: 100%; aspect-ratio: 16 / 9;">
+            <iframe
+              src="https://www.youtube.com/embed/{{ video.youtubeId }}"
+              title="{{ video.titulo }}"
+              style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              loading="lazy"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+        <p class="mt-4">
+          @link({
+            href: `https://www.youtube.com/watch?v=${video.youtubeId}`,
+            target: '_blank',
+            rel: 'noopener noreferrer',
+            class: 'il inline-flex items-center gap-1.5',
+          })
+            Ver no YouTube
+            @svg('lucide:external-link', {
+              width: 15,
+              height: 15,
+              'aria-hidden': 'true',
+            })
+          @end
+        </p>
+      </div>
+      {{-- Coluna de dados e registro --}}
+      <div class="flex min-w-0 flex-col gap-6">
+        <h1 class="font-display text-[32px] leading-[1.1] break-words">{{ video.titulo }}</h1>
 
-    <div style="position: relative; width: 100%; aspect-ratio: 16 / 9;">
-      <iframe
-        src="https://www.youtube.com/embed/{{ video.youtubeId }}"
-        title="{{ video.titulo }}"
-        style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        loading="lazy"
-        allowfullscreen
-      ></iframe>
-    </div>
-
-    @section({ title: 'Informações' })
-      <dl>
-        <dt>Canal</dt>
-        <dd>{{ video.canal ? video.canal.nome : '—' }}</dd>
-        <dt>Publicado por</dt>
-        <dd>{{ video.publicador ? video.publicador.nome : '—' }}</dd>
-        <dt>Data de publicação</dt>
-        <dd>{{ video.createdAt ? video.createdAt.toFormat('dd/MM/yyyy') : '—' }}</dd>
-      </dl>
-      <p>
-        @link({
-          href: `https://www.youtube.com/watch?v=${video.youtubeId}`,
-          target: '_blank',
-          rel: 'noopener noreferrer',
-        })
-          Ver no YouTube
+        <dl class="border-t-2 border-tinta">
+          <div class="grid grid-cols-[130px_minmax(0,1fr)] gap-3 border-b border-lilas py-3">
+            <dt class="text-sm text-apagado">Arquivado por</dt>
+            <dd class="font-semibold">{{ video.publicador ? video.publicador.nome : '—' }}</dd>
+          </div>
+          <div class="grid grid-cols-[130px_minmax(0,1fr)] gap-3 border-b border-lilas py-3">
+            <dt class="text-sm text-apagado">Data de entrada</dt>
+            <dd class="font-mono font-bold">
+              {{ video.createdAt ? video.createdAt.toFormat('dd/MM/yyyy') : '—' }}
+            </dd>
+          </div>
+          <div class="grid grid-cols-[130px_minmax(0,1fr)] gap-3 border-b border-lilas py-3">
+            <dt class="text-sm text-apagado">Média do acervo</dt>
+            <dd class="flex flex-col gap-1">
+              @if(notaMedia)
+                @!disquetes({
+                  nota: Number(String(notaMedia).replace(',', '.')),
+                  tamanho: 16,
+                })
+                <span class="font-mono text-sm font-bold">
+                  {{ `${notaMedia} em ${totalNotas} ${totalNotas === 1 ? 'avaliação' : 'avaliações'}` }}
+                </span>
+              @else
+                <span class="text-apagado">Ainda sem notas</span>
+              @end
+            </dd>
+          </div>
+        </dl>
+        @if(meusRegistros.length)
+          <div class="flex flex-wrap items-center gap-x-5 gap-y-3">
+            <span
+              class="inline-block -rotate-6 border-[3px] border-rosa px-3 py-1 font-mono text-lg font-bold whitespace-nowrap text-rosa"
+            >
+              ASSISTIDO
+              {{ meusRegistros.length }}×
+            </span>
+            <p class="min-w-[180px] flex-1 text-sm text-apagado">
+              {{ `Você assistiu este vídeo ${meusRegistros.length} vez(es). A última foi em ${meusRegistros[0].dataAssistido.toFormat('dd/MM/yyyy')}.` }}
+            </p>
+          </div>
         @end
-      </p>
-    @end
 
-    @section({ title: 'Nota média' })
-      <p>Em breve</p>
-    @end
+        <div class="box p-5">
+          @form({
+            route: 'registros.store',
+            routeParams: { id: video.id },
+            method: 'POST',
+            class: 'flex flex-col gap-5',
+          })
+            @field.root({ name: 'nota' })
+              @!notaPicker({ valor: old('nota') || '', legenda: 'Sua nota' })
+              @!field.error()
+            @end
+            @field.root({ name: 'data_assistido' })
+              @!field.label({ text: 'Data' })
+              @!input.control({ type: 'date', value: hoje, max: hoje })
+              @!field.error()
+            @end
+            @field.root({ name: 'review' })
+              @!field.label({ text: 'Review (opcional)' })
+              @!textarea.control({ rows: 4, maxlength: 5000 })
+              @!field.error()
+            @end
+            @!button({ text: 'Marcar como assistido', type: 'submit', block: true })
+          @end
+        </div>
+        @if(meusRegistros.length)
+          <section>
+            <h2 class="border-b-2 border-tinta pb-2 text-lg font-bold">Seus registros</h2>
+            <ul>
+              @each(registro in meusRegistros)
+                <li class="flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-lilas py-3">
+                  <span class="font-mono font-bold">
+                    {{ registro.dataAssistido.toFormat('dd/MM/yyyy') }}
+                  </span>
+                  @if(registro.nota)
+                    @!disquetes({ nota: registro.nota, tamanho: 16 })
+                  @else
+                    <span class="font-mono text-sm text-apagado">sem nota</span>
+                  @end
 
-    @section({ title: 'Reviews' })
-      <p>Em breve</p>
-    @end
-
-    @section({ title: 'Tags' })
-      @if(video.tags.length)
-        <ul>
-          @each(tag in video.tags)
-            <li>{{ tag.nome }}</li>
+                  <span class="ml-auto flex items-center gap-3">
+                    @link({
+                      route: 'reviews.edit',
+                      routeParams: { id: registro.id },
+                      class: 'il text-sm',
+                    })
+                      {{ registro.review ? 'Editar review' : 'Escrever review' }}
+                    @end
+                    @form({
+                      route: 'registros.destroy',
+                      routeParams: { id: registro.id },
+                      method: 'POST',
+                      class: 'inline-flex',
+                    })
+                      @!button({
+                        text: 'Remover',
+                        type: 'submit',
+                        variant: 'secondary',
+                        size: 'sm',
+                        class: 'mb-0',
+                      })
+                    @end
+                  </span>
+                </li>
+              @end
+            </ul>
+          </section>
+        @end
+      </div>
+    </div>
+    {{-- Reviews --}}
+    <section class="mt-14">
+      <h2 class="mb-7 border-b-2 border-tinta pb-3 font-display text-[28px] leading-tight">
+        Fichas de review
+      </h2>
+      @if(reviews.length)
+        <ul class="grid gap-7 md:grid-cols-2">
+          @each(review in reviews)
+            <li class="ficha min-w-0">
+              <div class="flex flex-wrap items-baseline justify-between gap-x-4">
+                <strong>{{ review.registro.user.nome }}</strong>
+                <span class="font-mono text-sm text-apagado">
+                  {{ `${review.registro.nota ? `nota ${review.registro.nota}` : 'sem nota'} — ${review.registro.dataAssistido.toFormat('dd/MM/yyyy')}` }}
+                </span>
+              </div>
+              <div class="flex h-8 items-center">
+                @!disquetes({ nota: review.registro.nota, tamanho: 18 })
+              </div>
+              <p class="font-serif text-[17px] break-words">
+                <span class="whitespace-pre-line">{{ review.texto }}</span>
+              </p>
+              @if(review.registro.userId === auth.user.id)
+                <div class="mt-2 flex flex-wrap items-center gap-4">
+                  @link({
+                    route: 'reviews.edit',
+                    routeParams: { id: review.registroId },
+                    class: 'il text-sm',
+                  })
+                    Editar
+                  @end
+                  @form({
+                    route: 'reviews.destroy',
+                    routeParams: { id: review.id },
+                    method: 'POST',
+                    class: 'inline-flex',
+                  })
+                    @!button({
+                      text: 'Excluir',
+                      type: 'submit',
+                      variant: 'secondary',
+                      size: 'sm',
+                      class: 'mb-0',
+                    })
+                  @end
+                </div>
+              @end
+            </li>
           @end
         </ul>
       @else
-        <p>Em breve</p>
+        <p class="text-apagado">Ninguém escreveu uma review ainda.</p>
       @end
-    @end
-  @end
+    </section>
+    {{-- Tags --}}
+    <section class="mt-14">
+      <h2 class="mb-4 font-display text-xl">Tags</h2>
+      @if(video.tags.length)
+        <ul class="flex flex-wrap gap-2.5">
+          @each(tag in video.tags)
+            <li class="border-2 border-tinta bg-white px-2.5 py-0.5 font-mono text-sm">
+              {{ tag.nome }}
+            </li>
+          @end
+        </ul>
+      @else
+        <p class="text-apagado">Em breve</p>
+      @end
+    </section>
+  </div>
 @end

@@ -1,19 +1,18 @@
-@layouts.marketing()
-  <div class="home">
-    <article class="prose-card">
-      <div class="pc-top">
-        <span class="pc-status mono tag" style="color: #c0392b;">
-          <span class="dot"></span>
-          {{ error.code || 500 }}
-        </span>
-      </div>
-      <div class="pc-lead">
-        <span>Something broke.</span>
-        <em>The server hit an unexpected error.</em>
-      </div>
-      <p class="pc-para">
-        Try again in a moment. If the problem persists, check the server logs for the underlying exception.
+@layouts.marketing({ title: 'Erro' })
+  <main class="flex justify-center px-4 py-16">
+    <article class="box w-full max-w-[580px] p-6 sm:p-10">
+      <span class="border-2 border-erro px-2.5 py-0.5 font-mono font-bold text-erro">
+        {{ error.code || 500 }}
+      </span>
+      <h1 class="mt-6 font-display text-2xl sm:text-3xl">Algo deu errado</h1>
+      <p class="mt-3 text-apagado">
+        O servidor encontrou um erro inesperado. Tente de novo em instantes.
       </p>
+      <div class="mt-7">
+        @link({ route: 'home', class: 'btn btn--primary' })
+          Voltar ao início
+        @end
+      </div>
     </article>
-  </div>
+  </main>
 @end

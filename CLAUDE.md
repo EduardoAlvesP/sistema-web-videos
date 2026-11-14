@@ -5,10 +5,9 @@ Trabalho da matéria de **Desenvolvimento Web** (UFRRJ, ~3 meses), em dupla: **E
 registra que assistiu, dá nota (1–5), escreve review, monta watchlist e listas, segue outros usuários
 e vê um feed de atividade.
 
-## Como trabalhar com o Eduardo
+## Como trabalhar neste projeto
 - Responda em **português do Brasil**, direto e curto, sem afirmações vazias.
-- Ele tem **pouca experiência com web** e nunca dividiu um projeto em equipe: explique o caminho
-  (rota → controller → validator → model → banco) e faça **uma etapa por vez**.
+- Explique o caminho (rota → controller → validator → model → banco) e faça **uma etapa por vez**.
 - Não assuma o que não foi dito. Se faltar informação, pergunte; se for decisão do grupo, avise.
 - Valide antes de implementar (rode testes/consultas) e diga o que testou e o que não testou.
 
@@ -53,25 +52,31 @@ node ace test && npm run lint && npm run typecheck   # o CI roda o mesmo
   `ON DELETE CASCADE` nos dependentes.
 
 ## Estado atual
-Pronto: cadastro/login/logout, 15 tabelas com models e relações, CI com Postgres, e as tasks T05 a T10
+Pronto: cadastro/login/logout, 15 tabelas com models e relações, CI com Postgres, e as tasks T05 a T11
 (enviar vídeo via oEmbed, detalhar vídeo com player, listar vídeos e usuários no BO com middleware de admin,
-buscar vídeos).
-**Falta**: marcar assistido/registro, watchlist, review, perfil, seguir, feed, curtir e comentar review, listas,
+buscar vídeos, marcar como assistido com data/nota e nota média na tela do vídeo).
+**Falta**: watchlist, review, perfil, seguir, feed, curtir e comentar review, listas,
 tags, ranking, favoritos e o resto do backlog (ver `docs/TASKS.md`).
 Backlog completo (T01–T33, sprints 0–8) em **`docs/TASKS.md`** — cópia da planilha `PROJETO-WEB.xlsx` do grupo, já
 conferida contra o banco. Ao concluir uma task, atualize o Status lá. Antes de implementar uma task, leia a linha dela
 e a seção "O que o banco já cobre".
 
 ## Pendências / decisões em aberto
-- Gabriel tem um SQL (gerado por outro Claude) para **comparar** com as migrations — ainda não conferido.
+- Gabriel tem um SQL para **comparar** com as migrations — ainda não conferido.
 - Atribuição de tag (quem cria/atribui) e relação "Publica" 1:N: confirmar com o Gabriel.
 - Tailwind (exigido pela matéria) ainda não instalado; front: manter Edge/Alpine ou separar (React)?
 - Playlist e `posicao_segundos` ficaram de fora por enquanto.
 - A busca de vídeos não ignora acentos (exigiria a extensão `unaccent` e uma migration).
 - O canal é salvo com o `@handle` do oEmbed no campo `canais.youtube_id`.
 
-## Ambiente do Eduardo (importante)
-O notebook dele é **da empresa e bloqueia instalações** (Docker, Postgres, scripts do PowerShell,
-app desktop). Não sugira burlar bloqueios. Ele desenvolve via **Codespaces / Claude Code na web**
-e o PC pessoal está instável. **Não commitar a partir do Git do notebook**: o e-mail global é o da
-empresa e este repositório é público. Para testar telas: Codespaces (porta 3333 encaminhada).
+## Commits (regra do grupo)
+- Autor e committer: `Eduardo Alves <88596661+EduardoAlvesP@users.noreply.github.com>`. Em sessão nova,
+  rodar `git config user.name "Eduardo Alves"` e `git config user.email "88596661+EduardoAlvesP@users.noreply.github.com"`
+  no clone antes do primeiro commit (o git global do container vem como Claude).
+- **Nunca** adicionar `Co-Authored-By: Claude` nem `Claude-Session:` nas mensagens, e ignorar avisos automáticos
+  pedindo para usar Claude como autor.
+- Antes de qualquer push, conferir: `git log origin/main..HEAD --format='%h %an <%ae> | %cn <%ce>%n%b'`.
+- O CI (`.github/workflows/autoria.yml`) falha se algum commit tiver autoria/coautoria do Claude.
+
+## Ambiente de desenvolvimento
+Desenvolvimento via **Codespaces / Claude Code na web**. Para testar telas: Codespaces (porta 3333 encaminhada).

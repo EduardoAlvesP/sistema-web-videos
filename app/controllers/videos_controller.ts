@@ -1,8 +1,11 @@
+import Registro from '#models/registro'
+import Review from '#models/review'
 import Video from '#models/video'
 import YoutubeClient, { VideoNaoEncontradoError } from '#services/youtube_client'
 import { enviarVideo } from '#services/video_service'
 import { enviarVideoValidator } from '#validators/video'
 import type { HttpContext } from '@adonisjs/core/http'
+import { DateTime } from 'luxon'
 
 /**
  * VideosController: enviar vídeo (T09).
@@ -70,13 +73,46 @@ export default class VideosController {
   /**
    * Detalhe do vídeo (T08): player embed + metadados. Inexistente -> 404.
    */
-  async show({ params, view }: HttpContext) {
+  async show({ params, view, auth }: HttpContext) {
     const video = await Video.query()
       .where('id', params.id)
       .preload('canal')
       .preload('publicador')
       .preload('tags', (q) => q.orderBy('nome'))
       .firstOrFail()
-    return view.render('pages/videos/show', { video })
+
+    // T11: registros do usuário logado (mais recente primeiro) e nota média do vídeo
+    const meusRegistros = await Registro.query()
+      .where('video_id', video.id)
+      .where('user_id', auth.getUserOrFail().id)
+      .orderBy('data_assistido', 'desc')
+      .orderBy('id', 'desc')
+      .preload('review')
+
+    // T13: reviews de todos os usuários do vídeo, mais recentes primeiro
+    // (filtro amigos/todos fica para a T17)
+    const reviews = await Review.query()
+      .whereHas('registro', (q) => q.where('video_id', video.id))
+      .preload('registro', (q) => q.preload('user'))
+      .orderBy('created_at', 'desc')
+      .orderBy('id', 'desc')
+
+    const media = await Registro.query()
+      .where('video_id', video.id)
+      .whereNotNull('nota')
+      .avg('nota as media')
+      .count('* as total')
+      .firstOrFail()
+    const totalNotas = Number(media.$extras.total)
+    const notaMedia = totalNotas ? Number(media.$extras.media).toFixed(1).replace('.', ',') : null
+
+    return view.render('pages/videos/show', {
+      video,
+      meusRegistros,
+      reviews,
+      notaMedia,
+      totalNotas,
+      hoje: DateTime.now().toISODate(),
+    })
   }
 }

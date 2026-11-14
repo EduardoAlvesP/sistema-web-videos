@@ -1,51 +1,36 @@
+{{-- Telas de entrar e criar conta: no topo, o link para a outra tela. --}}
+@let(pageTitle = $props.get('title'))
+@let(naTelaDeLogin = request.url() === urlFor('session.create'))
 <!DOCTYPE html>
-<html
-  lang="en-us"
-  data-theme="{{
-    request.plainCookie('app_theme', {
-      defaultValue: 'light',
-      encoded: false,
-    })
-  }}"
->
+<html lang="pt-BR">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AdonisJS — Starter Kit</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @include('partials/head')
     @stack('dumper')
   </head>
-  <body>
-    <div class="auth">
-      <div class="auth__form-col">
-        @!logo({ size: 28 })
-        <div class="auth__form-wrap">{{{ await $slots.main() }}}</div>
-        <div style="height: 20px;"></div>
+  <body class="min-h-screen bg-papel text-tinta font-sans">
+    <header class="bg-tinta text-papel">
+      <div
+        class="mx-auto flex min-h-[84px] max-w-[1168px] items-center justify-between gap-4 px-4 sm:px-6"
+      >
+        @!logo()
+        @if(naTelaDeLogin)
+          @link({
+            route: 'new_account.create',
+            class: 'font-bold underline underline-offset-4 hover:text-white',
+          })
+            Criar conta
+          @end
+        @else
+          @link({
+            route: 'session.create',
+            class: 'font-bold underline underline-offset-4 hover:text-white',
+          })
+            Entrar
+          @end
+        @end
       </div>
-
-      <aside class="auth__aside">
-        <div class="auth__aside-top">
-          @!themeToggle()
-        </div>
-
-        <p class="auth__quote">Auth, kept intentionally minimal so you can build it your way.</p>
-
-        <div>
-          <div class="pitch__t">Looking for production-ready auth?</div>
-          <p class="pitch__p">
-            Check out Feature packs, production-ready full-stack components from the creator of AdonisJS.
-          </p>
-          <a
-            class="il pitch__a"
-            href="https://plus.adonisjs.com/feature-packs"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Explore Feature packs →
-          </a>
-        </div>
-      </aside>
-    </div>
+    </header>
+    <main class="flex justify-center px-4 py-12 sm:py-16">{{{ await $slots.main() }}}</main>
     @include('partials/flash_alerts')
   </body>
 </html>

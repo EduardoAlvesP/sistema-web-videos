@@ -1,16 +1,16 @@
-@layouts.marketing()
-  <div class="home">
-    <article class="prose-card">
-      <div class="pc-top">
-        <span class="pc-status mono tag" style="color: var(--subtle);">
-          <span class="dot"></span>
-          404
-        </span>
-      </div>
-      <div class="pc-lead"><span>Not found.</span> <em>That route hasn't been built yet.</em></div>
-      <p class="pc-para">
-        The page you tried to reach doesn't exist. Check the URL or head back home.
+@layouts.marketing({ title: '404' })
+  <main class="flex justify-center px-4 py-16">
+    <article class="box w-full max-w-[580px] p-6 sm:p-10">
+      <span class="border-2 border-tinta px-2.5 py-0.5 font-mono font-bold">404</span>
+      <h1 class="mt-6 font-display text-2xl sm:text-3xl">Não encontrado</h1>
+      <p class="mt-3 text-apagado">
+        A página que você tentou abrir não existe ou foi removida. Confira o endereço.
       </p>
+      <div class="mt-7">
+        @link({ route: 'home', class: 'btn btn--primary' })
+          Voltar ao início
+        @end
+      </div>
     </article>
-  </div>
+  </main>
 @end

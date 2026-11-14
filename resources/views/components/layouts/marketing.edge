@@ -1,36 +1,30 @@
+@let(pageTitle = $props.get('title'))
 <!DOCTYPE html>
-<html
-  lang="en-us"
-  data-theme="{{
-    request.plainCookie('app_theme', {
-      defaultValue: 'light',
-      encoded: false,
-    })
-  }}"
->
+<html lang="pt-BR">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AdonisJS — Starter Kit</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @include('partials/head')
     @stack('dumper')
   </head>
-  <body>
-    <header class="header header--floating">
-      <div class="header__inner">
-        @!logo({ size: 28 })
-        <div class="header__right">
-          @!themeToggle()
+  <body class="min-h-screen bg-papel text-tinta font-sans">
+    <header class="bg-tinta text-papel">
+      <div
+        class="mx-auto flex min-h-[84px] max-w-[1168px] items-center justify-between gap-4 px-4 sm:px-6"
+      >
+        @!logo()
+        <div class="flex items-center gap-4 sm:gap-5">
           @if(auth?.user)
             @link({ route: 'dashboard', class: 'btn btn--primary btn--sm' })
-              Dashboard
+              Perfil
             @end
           @else
-            @link({ route: 'session.create', class: 'btn btn--ghost btn--sm' })
-              Sign in
+            @link({
+              route: 'session.create',
+              class: 'font-semibold hover:underline underline-offset-4',
+            })
+              Entrar
             @end
             @link({ route: 'new_account.create', class: 'btn btn--primary btn--sm' })
-              Get started
+              Criar conta
             @end
           @end
         </div>

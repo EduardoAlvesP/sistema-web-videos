@@ -1,55 +1,74 @@
 @layouts.app({ title: 'Admin · Usuários' })
-  @page()
-    <nav aria-label="Admin">
-      @link({ route: 'admin.videos.index' })
+  <div class="page min-w-0">
+    <nav aria-label="Admin" class="flex gap-5">
+      @link({ route: 'admin.videos.index', class: 'il' })
         Vídeos
       @end
-      @link({ route: 'admin.users.index' })
+      @link({ route: 'admin.users.index', class: 'il' })
         Usuários
       @end
     </nav>
-    <h1>Usuários</h1>
-    @if(users.length)
-      <table>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>E-mail</th>
-            <th>Papel</th>
-            <th>Vídeos publicados</th>
-            <th>Cadastro</th>
-          </tr>
-        </thead>
-        <tbody>
-          @each(user in users)
-            <tr data-user-row>
-              <td>{{ user.nome }}</td>
-              <td>{{ user.email }}</td>
-              <td>{{ user.papel }}</td>
-              <td>{{ user.$extras.videosPublicados_count }}</td>
-              <td>{{ user.createdAt.toFormat('dd/MM/yyyy HH:mm') }}</td>
-            </tr>
-          @end
-        </tbody>
-      </table>
-    @else
-      <p>Nenhum usuário cadastrado.</p>
-    @end
-
+    <h1 class="mt-6 mb-7 font-display text-[28px] leading-tight sm:text-[32px]">Usuários</h1>
+    <div class="flex min-w-0 flex-col">
+      <span class="aba">Usuários</span>
+      <div class="box min-w-0">
+        @if(users.length)
+          <div class="overflow-x-auto">
+            <table
+              class="tabela [&_td:nth-child(1)]:min-w-[160px] [&_td:nth-child(4)]:font-mono [&_td:nth-child(4)]:text-sm [&_td:nth-child(4)]:whitespace-nowrap [&_td:nth-child(5)]:font-mono [&_td:nth-child(5)]:text-sm [&_td:nth-child(5)]:whitespace-nowrap [&_td:nth-child(3)]:my-2.5 [&_td:nth-child(3)]:ml-4 [&_td:nth-child(3)]:inline-block [&_td:nth-child(3)]:border-2 [&_td:nth-child(3)]:border-tinta [&_td:nth-child(3)]:bg-white [&_td:nth-child(3)]:px-2 [&_td:nth-child(3)]:py-0 [&_td:nth-child(3)]:font-mono [&_td:nth-child(3)]:text-sm [&_tr[data-papel=admin]_td:nth-child(3)]:bg-rosa [&_tr[data-papel=admin]_td:nth-child(3)]:text-white"
+            >
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>E-mail</th>
+                  <th>Papel</th>
+                  <th>Vídeos publicados</th>
+                  <th>Cadastro</th>
+                </tr>
+              </thead>
+              <tbody>
+                @each(user in users)
+                  <tr data-user-row data-papel="{{ user.papel }}">
+                    <td>{{ user.nome }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.papel }}</td>
+                    <td>{{ user.$extras.videosPublicados_count }}</td>
+                    <td>{{ user.createdAt.toFormat('dd/MM/yyyy HH:mm') }}</td>
+                  </tr>
+                @end
+              </tbody>
+            </table>
+          </div>
+        @else
+          <p class="p-5 text-apagado">
+            Nenhum usuário cadastrado. Quem criar conta em "Criar conta" aparece aqui.
+          </p>
+        @end
+      </div>
+    </div>
     @if(users.hasPages)
-      <nav aria-label="Paginação">
+      <nav aria-label="Paginação" class="mt-8 flex flex-wrap items-center gap-4">
         @if(users.currentPage > 1)
-          @link({ href: users.getPreviousPageUrl() })
+          @link({
+            href: users.getPreviousPageUrl(),
+            class: 'btn btn--secondary btn--sm',
+          })
             Anterior
           @end
         @end
-        <span>Página {{ users.currentPage }} de {{ users.lastPage }}</span>
+
+        <span class="font-mono text-sm">
+          Página
+          {{ users.currentPage }}
+          de
+          {{ users.lastPage }}
+        </span>
         @if(users.hasMorePages)
-          @link({ href: users.getNextPageUrl() })
+          @link({ href: users.getNextPageUrl(), class: 'btn btn--secondary btn--sm' })
             Próxima
           @end
         @end
       </nav>
     @end
-  @end
+  </div>
 @end
