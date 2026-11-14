@@ -13,7 +13,6 @@
         allowfullscreen
       ></iframe>
     </div>
-
     @section({ title: 'Informações' })
       <dl>
         <dt>Canal</dt>
@@ -33,15 +32,62 @@
         @end
       </p>
     @end
-
-    @section({ title: 'Nota média' })
-      <p>Em breve</p>
+    @section({ title: 'Assistido' })
+      @if(meusRegistros.length)
+        <p>
+          {{ `Você assistiu este vídeo ${meusRegistros.length} vez(es). A última foi em ${meusRegistros[0].dataAssistido.toFormat('dd/MM/yyyy')}.` }}
+        </p>
+        <ul>
+          @each(registro in meusRegistros)
+            <li>
+              {{ `${registro.dataAssistido.toFormat('dd/MM/yyyy')} — ${registro.nota ? `nota ${registro.nota}` : 'sem nota'}` }}
+              @form({
+                route: 'registros.destroy',
+                routeParams: { id: registro.id },
+                method: 'POST',
+                style: 'display: inline;',
+              })
+                @!button({ text: 'Remover', type: 'submit' })
+              @end
+            </li>
+          @end
+        </ul>
+      @end
+      @form({ route: 'registros.store', routeParams: { id: video.id }, method: 'POST' })
+        @field.root({ name: 'data_assistido' })
+          @!field.label({ text: 'Data' })
+          @!input.control({ type: 'date', value: hoje, max: hoje })
+          @!field.error()
+        @end
+        @field.root({ name: 'nota' })
+          @!field.label({ text: 'Nota' })
+          @!select.control({
+            options: [
+              { value: '', name: 'Sem nota' },
+              { value: '1', name: '1' },
+              { value: '2', name: '2' },
+              { value: '3', name: '3' },
+              { value: '4', name: '4' },
+              { value: '5', name: '5' },
+            ],
+          })
+          @!field.error()
+        @end
+        @!button({ text: 'Marcar como assistido', type: 'submit' })
+      @end
     @end
-
+    @section({ title: 'Nota média' })
+      @if(notaMedia)
+        <p>
+          {{ `${notaMedia} em ${totalNotas} ${totalNotas === 1 ? 'avaliação' : 'avaliações'}` }}
+        </p>
+      @else
+        <p>Ainda sem notas</p>
+      @end
+    @end
     @section({ title: 'Reviews' })
       <p>Em breve</p>
     @end
-
     @section({ title: 'Tags' })
       @if(video.tags.length)
         <ul>

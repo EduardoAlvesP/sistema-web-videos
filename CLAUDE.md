@@ -52,10 +52,10 @@ node ace test && npm run lint && npm run typecheck   # o CI roda o mesmo
   `ON DELETE CASCADE` nos dependentes.
 
 ## Estado atual
-Pronto: cadastro/login/logout, 15 tabelas com models e relações, CI com Postgres, e as tasks T05 a T10
+Pronto: cadastro/login/logout, 15 tabelas com models e relações, CI com Postgres, e as tasks T05 a T11
 (enviar vídeo via oEmbed, detalhar vídeo com player, listar vídeos e usuários no BO com middleware de admin,
-buscar vídeos).
-**Falta**: marcar assistido/registro, watchlist, review, perfil, seguir, feed, curtir e comentar review, listas,
+buscar vídeos, marcar como assistido com data/nota e nota média na tela do vídeo).
+**Falta**: watchlist, review, perfil, seguir, feed, curtir e comentar review, listas,
 tags, ranking, favoritos e o resto do backlog (ver `docs/TASKS.md`).
 Backlog completo (T01–T33, sprints 0–8) em **`docs/TASKS.md`** — cópia da planilha `PROJETO-WEB.xlsx` do grupo, já
 conferida contra o banco. Ao concluir uma task, atualize o Status lá. Antes de implementar uma task, leia a linha dela

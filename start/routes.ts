@@ -35,6 +35,15 @@ router
       .get('videos/:id', [controllers.Videos, 'show'])
       .where('id', router.matchers.number())
       .as('videos.show')
+
+    router
+      .post('videos/:id/registros', [controllers.Registros, 'store'])
+      .where('id', router.matchers.number())
+      .as('registros.store')
+    router
+      .post('registros/:id/excluir', [controllers.Registros, 'destroy'])
+      .where('id', router.matchers.number())
+      .as('registros.destroy')
   })
   .use(middleware.auth())
 
