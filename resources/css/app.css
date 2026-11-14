@@ -321,3 +321,72 @@
     @apply border-b-0;
   }
 }
+
+/* ==========================================================================
+   Enviar vídeo: aparelho com fenda e fita
+   ========================================================================== */
+@layer components {
+  /* fenda: o input vive aqui dentro; o foco aparece na fenda */
+  .fenda {
+    @apply relative flex h-[34px] w-full items-center border-2 border-tinta px-4;
+    background: #120a18;
+    box-shadow:
+      inset 0 10px 10px -6px #000,
+      inset 8px 0 10px -8px #000,
+      inset -8px 0 10px -8px #000,
+      inset 0 -2px 0 #4a2a55;
+  }
+  .fenda:focus-within {
+    outline: 2px solid var(--color-rosa);
+    outline-offset: 2px;
+  }
+  /* (0,2,1) para vencer .field__input e .field__input[aria-invalid] */
+  .fenda input.field__input {
+    all: unset;
+    @apply relative z-[1] block w-full min-w-0 font-mono text-[15px] font-bold;
+    color: #e998ac;
+    caret-color: #e998ac;
+  }
+  .fenda input.field__input::placeholder {
+    color: rgb(233 152 172 / 0.45);
+  }
+  .fenda input.field__input:-webkit-autofill {
+    -webkit-box-shadow: inset 0 0 0 1000px #120a18;
+    -webkit-text-fill-color: #e998ac;
+  }
+
+  /* fita (decorativa) apoiada em cima da fenda */
+  .fita {
+    @apply pointer-events-none absolute inset-x-2 z-10 h-[116px] border-2 border-tinta;
+    bottom: calc(100% - 2px);
+    background: #3b2044;
+    box-shadow: 0 7px 10px -2px rgba(0, 0, 0, 0.55);
+    transition:
+      transform 400ms ease-in,
+      opacity 400ms ease-in;
+  }
+  .fita::after {
+    content: '';
+    @apply absolute inset-x-0 bottom-0 h-[22px];
+    background: linear-gradient(transparent, rgba(14, 8, 20, 0.75));
+  }
+  .fita--saindo {
+    transform: translateY(130px);
+    opacity: 0;
+  }
+  .fita__parafuso {
+    @apply absolute top-1.5 size-3 rounded-full border-2 border-tinta bg-lilas;
+  }
+  .fita__pauta {
+    background: repeating-linear-gradient(#fff 0 31px, #e4dce6 31px 32px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fita {
+      transition: none;
+    }
+    .fita--saindo {
+      transform: none;
+      opacity: 1;
+    }
+  }
+}
