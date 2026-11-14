@@ -302,17 +302,22 @@
     outline-offset: 2px;
   }
 
-  /* --- tabela (admin) --- */
+  /* --- tabela (admin) ---
+     Linhas separadas no <tr> (border-collapse), assim a borda continua mesmo
+     se uma célula for estilizada como etiqueta (inline-block). */
   .tabela {
-    @apply w-full border-collapse border-2 border-tinta bg-white text-left;
+    @apply w-full border-collapse bg-white text-left;
   }
   .tabela th {
-    @apply border-b-2 border-tinta bg-papel px-3 py-2.5 text-sm font-bold;
+    @apply border-b-2 border-tinta bg-papel px-4 py-3 text-sm font-bold whitespace-nowrap;
   }
   .tabela td {
-    @apply border-b border-lilas px-3 py-2.5 align-top;
+    @apply px-4 py-3 align-middle;
   }
-  .tabela tbody tr:last-child td {
+  .tabela tbody tr {
+    @apply border-b border-lilas hover:bg-papel/50;
+  }
+  .tabela tbody tr:last-child {
     @apply border-b-0;
   }
 }
