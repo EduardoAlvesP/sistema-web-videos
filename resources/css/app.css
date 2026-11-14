@@ -48,7 +48,9 @@
     --lado: var(--color-rosa-lado);
     --t: var(--color-tinta);
     @apply relative inline-flex items-center justify-center gap-2 px-6 text-center whitespace-nowrap;
-    @apply border-2 border-tinta rounded-none cursor-pointer select-none;
+    /* sem border: o contorno de 2px tinta vem só do box-shadow (0 0 0 2px),
+       assim a borda fica uniforme nos 4 lados */
+    @apply border-0 rounded-none cursor-pointer select-none;
     @apply text-[15px] font-bold uppercase tracking-[.06em] leading-none;
     @apply min-h-[54px] mr-2 mb-2;
     box-shadow:
