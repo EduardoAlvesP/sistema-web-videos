@@ -1,0 +1,53 @@
+{{--
+  Nota clicável para formulários: radios name="nota" (vazio, 1–5) escondidos,
+  cada disquete é o label. Alpine pinta os disquetes até o escolhido (ou até
+  o que está sob o mouse). Props: valor (nota atual, '' = sem nota), legenda.
+--}}
+@let(inicial =
+  $props.get('valor') === null || $props.get('valor') === undefined
+    ? ''
+    : String($props.get('valor')))
+<fieldset class="nota-picker" x-data="{ nota: '{{ inicial }}', hover: 0 }">
+  <legend class="field__label">{{ $props.get('legenda') ?? 'Nota' }}</legend>
+  <div class="mt-2 flex flex-wrap items-center gap-x-1 gap-y-2" x-on:mouseleave="hover = 0">
+    @each(n in [1, 2, 3, 4, 5])
+      <label
+        class="nota-picker__disquete {{ inicial !== '' && Number(inicial) >= n ? 'is-cheio' : '' }}"
+        title="Nota {{ n }}"
+        x-on:mouseenter="hover = {{ n }}"
+        x-bind:class="{ 'is-cheio': (hover || Number(nota)) >= {{ n }} }"
+      >
+        <input
+          type="radio"
+          name="nota"
+          value="{{ n }}"
+          class="sr-only"
+          x-model="nota"
+          {{ inicial === String(n) ? 'checked' : '' }}
+        />
+        <span class="sr-only">Nota {{ n }} de 5</span>
+        <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path
+            class="disq-corpo"
+            d="M2.5 4.5Q2.5 2.5 4.5 2.5H18L21.5 6V19.5Q21.5 21.5 19.5 21.5H4.5Q2.5 21.5 2.5 19.5Z"
+          />
+          <rect class="disq-janela" x="7" y="2.5" width="9.5" height="6.5" />
+          <rect class="disq-corpo" x="13" y="3.5" width="2" height="4.5" />
+          <rect class="disq-etiqueta" x="5.5" y="12.5" width="13" height="9" rx="1" />
+        </svg>
+      </label>
+    @end
+
+    <label class="nota-picker__sem ml-1.5">
+      <input
+        type="radio"
+        name="nota"
+        value=""
+        class="sr-only"
+        x-model="nota"
+        {{ inicial === '' ? 'checked' : '' }}
+      />
+      <span>Sem nota</span>
+    </label>
+  </div>
+</fieldset>

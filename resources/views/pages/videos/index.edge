@@ -1,45 +1,103 @@
 @layouts.app({ title: 'Vídeos' })
-  @page()
-    <h1>Vídeos</h1>
-    <form method="GET" action="{{ route('videos.index') }}" role="search">
-      <input type="search" name="q" value="{{ q }}" placeholder="Buscar por título" aria-label="Buscar por título" />
-      @!button({ text: 'Buscar', type: 'submit' })
+  <div class="page">
+    <h1 class="font-display text-[32px] leading-tight">Vídeos</h1>
+
+    <form
+      method="GET"
+      action="{{ route('videos.index') }}"
+      role="search"
+      class="mt-6 flex max-w-[620px] flex-wrap items-start gap-3"
+    >
+      <input
+        type="search"
+        name="q"
+        value="{{ q }}"
+        placeholder="Buscar por título"
+        aria-label="Buscar por título"
+        class="field__input min-w-0 flex-1 basis-[220px]"
+      />
+      @!button({ text: 'Buscar', type: 'submit', class: 'mb-0 min-h-12' })
     </form>
 
-    <p>{{ videos.total }} {{ videos.total === 1 ? 'resultado' : 'resultados' }}</p>
-
+    <p class="mt-5 font-mono text-sm text-apagado">
+      {{ `${videos.total} ${videos.total === 1 ? 'resultado' : 'resultados'}` }}
+    </p>
     @if(videos.length)
-      <ul>
+      <ul class="mt-4 grid gap-7 [grid-template-columns:repeat(auto-fill,minmax(240px,1fr))]">
         @each(video in videos)
-          <li>
-            @if(video.thumbnail)
-              <img src="{{ video.thumbnail }}" alt="" width="160" loading="lazy" />
+          <li class="min-w-0">
+            @link({
+              route: 'videos.show',
+              routeParams: { id: video.id },
+              class:
+                'box group flex h-full flex-col transition-transform hover:-translate-y-0.5',
+            })
+              @if(video.thumbnail)
+                <img
+                  src="{{ video.thumbnail }}"
+                  alt=""
+                  loading="lazy"
+                  class="aspect-video w-full border-b-2 border-tinta object-cover"
+                />
+              @else
+                <div
+                  class="aspect-video w-full border-b-2 border-tinta bg-tinta"
+                  aria-hidden="true"
+                ></div>
+              @end
+
+              <div class="flex flex-col gap-1 p-4">
+                <h2 class="font-bold leading-snug break-words group-hover:text-rosa">
+                  {{ video.titulo }}
+                </h2>
+                <span class="text-sm text-apagado">{{ video.canal ? video.canal.nome : '—' }}</span>
+              </div>
             @end
-            @link({ route: 'videos.show', routeParams: { id: video.id } })
-              {{ video.titulo }}
-            @end
-            <span>{{ video.canal ? video.canal.nome : '—' }}</span>
           </li>
         @end
       </ul>
     @else
-      <p>Nenhum vídeo encontrado</p>
-    @end
+      <div class="box mt-4 max-w-[620px] p-6">
+        <p class="font-bold">Nenhum vídeo encontrado</p>
+        <p class="mt-2 text-apagado">
+          <span>
+            {{
+              q
+                ? 'Tente outra palavra do título ou'
+                : 'O acervo ainda está vazio.'
+            }}
+          </span>
+          @link({ route: 'videos.create', class: 'il' })
+            arquive um vídeo do YouTube
+          @end
 
+          <span>colando o link dele.</span>
+        </p>
+      </div>
+    @end
     @if(videos.hasPages)
-      <nav aria-label="Paginação">
+      <nav aria-label="Paginação" class="mt-10 flex flex-wrap items-center gap-4">
         @if(videos.currentPage > 1)
-          @link({ href: videos.getPreviousPageUrl() })
+          @link({
+            href: videos.getPreviousPageUrl(),
+            class: 'btn btn--secondary btn--sm',
+          })
             Anterior
           @end
         @end
-        <span>Página {{ videos.currentPage }} de {{ videos.lastPage }}</span>
+
+        <span class="font-mono text-sm">
+          Página
+          {{ videos.currentPage }}
+          de
+          {{ videos.lastPage }}
+        </span>
         @if(videos.hasMorePages)
-          @link({ href: videos.getNextPageUrl() })
+          @link({ href: videos.getNextPageUrl(), class: 'btn btn--secondary btn--sm' })
             Próxima
           @end
         @end
       </nav>
     @end
-  @end
+  </div>
 @end

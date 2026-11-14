@@ -1,24 +1,33 @@
 @layouts.app({ title: 'Enviar vídeo' })
-  @page()
-    <h1>Enviar vídeo</h1>
-    <p>Cole o link ou o ID de um vídeo do YouTube.</p>
-    @form({
-      route: 'videos.store',
-      method: 'POST',
-      'x-data': '{ submitting: false }',
-      'x-on:submit': 'submitting = true',
-    })
-      @field.root({ name: 'url' })
-        @!field.label({ text: 'URL ou ID do vídeo' })
-        @!input.control({ placeholder: 'https://www.youtube.com/watch?v=...' })
-        @!field.error()
-      @end
-      @!button({
-        text: 'Enviar',
-        type: 'submit',
-        'x-bind:disabled': 'submitting',
-        'x-text': "submitting ? 'Buscando no YouTube…' : 'Enviar'",
-      })
-    @end
-  @end
+  <div class="page max-w-[680px]">
+    <div class="flex flex-col">
+      <span class="aba">Novo arquivo</span>
+      <div class="box p-5 sm:p-7">
+        <h1 class="font-display text-2xl sm:text-[28px]">Arquivar vídeo</h1>
+        <p class="mt-2 text-apagado">Cole o link ou o ID de um vídeo do YouTube.</p>
+        @form({
+          route: 'videos.store',
+          method: 'POST',
+          class: 'mt-6 flex flex-col gap-5',
+          'x-data': '{ submitting: false }',
+          'x-on:submit': 'submitting = true',
+        })
+          @field.root({ name: 'url' })
+            @!field.label({ text: 'URL ou ID do vídeo' })
+            @!input.control({ placeholder: 'https://www.youtube.com/watch?v=...' })
+            @!field.error()
+          @end
+
+          <div>
+            @!button({
+              text: 'Enviar',
+              type: 'submit',
+              'x-bind:disabled': 'submitting',
+              'x-text': "submitting ? 'Buscando no YouTube…' : 'Enviar'",
+            })
+          </div>
+        @end
+      </div>
+    </div>
+  </div>
 @end

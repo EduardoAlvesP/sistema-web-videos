@@ -260,3 +260,74 @@
     @apply text-erro;
   }
 }
+
+/* ==========================================================================
+   Vídeo e review
+   ========================================================================== */
+@layer components {
+  /* --- ficha pautada (review) --- */
+  .ficha {
+    @apply relative border-2 border-tinta leading-8 shadow-[4px_4px_0_var(--color-tinta)];
+    background: #fff repeating-linear-gradient(#fff 0 31px, #e4dce6 31px 32px);
+    /* pauta começa junto com o texto (depois do padding de cima) */
+    background-position: 0 20px;
+    background-size: 100% 32px;
+    padding: 20px 24px 20px 48px;
+  }
+  .ficha::before {
+    content: '';
+    @apply absolute inset-y-0 w-[2px] bg-rosa opacity-50;
+    left: 32px;
+  }
+  /* textarea com o mesmo fundo pautado; as linhas rolam junto com o texto */
+  .field textarea.pautado {
+    @apply py-0 leading-8;
+    background: #fff repeating-linear-gradient(#fff 0 31px, #e4dce6 31px 32px);
+    background-attachment: local;
+  }
+
+  /* --- nota clicável: radios escondidos, disquete como label --- */
+  .nota-picker__disquete {
+    @apply inline-flex cursor-pointer p-0.5;
+  }
+  .nota-picker__disquete .disq-corpo {
+    fill: var(--color-lilas);
+  }
+  .nota-picker__disquete .disq-janela,
+  .nota-picker__disquete .disq-etiqueta {
+    fill: var(--color-papel);
+  }
+  .nota-picker__disquete.is-cheio .disq-corpo {
+    fill: var(--color-rosa);
+  }
+  .nota-picker__disquete.is-cheio .disq-janela {
+    fill: var(--color-tinta);
+  }
+  .nota-picker__disquete.is-cheio .disq-etiqueta {
+    fill: #fff;
+  }
+  .nota-picker__sem {
+    @apply cursor-pointer border-2 border-tinta bg-white px-2.5 py-1 font-mono text-sm;
+  }
+  .nota-picker__sem:has(input:checked) {
+    @apply bg-tinta text-white;
+  }
+  .nota-picker label:has(input:focus-visible) {
+    outline: 2px solid var(--color-rosa);
+    outline-offset: 2px;
+  }
+
+  /* --- tabela (admin) --- */
+  .tabela {
+    @apply w-full border-collapse border-2 border-tinta bg-white text-left;
+  }
+  .tabela th {
+    @apply border-b-2 border-tinta bg-papel px-3 py-2.5 text-sm font-bold;
+  }
+  .tabela td {
+    @apply border-b border-lilas px-3 py-2.5 align-top;
+  }
+  .tabela tbody tr:last-child td {
+    @apply border-b-0;
+  }
+}

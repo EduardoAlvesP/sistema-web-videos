@@ -1,42 +1,76 @@
 @layouts.app({ title: review ? 'Editar review' : 'Escrever review' })
-  @page()
-    <h1>{{ review ? 'Editar review' : 'Escrever review' }}</h1>
-    <p>
-      @link({ route: 'videos.show', routeParams: { id: registro.video.id } })
-        {{ registro.video.titulo }}
-      @end
-    </p>
-    <p>{{ `Assistido em ${registro.dataAssistido.toFormat('dd/MM/yyyy')}` }}</p>
-    @form({ route: 'reviews.store', routeParams: { id: registro.id }, method: 'POST' })
-      @field.root({ name: 'nota' })
-        @!field.label({ text: 'Nota' })
-        @!select.control({
-          options: [
-            { value: '', name: 'Sem nota', isSelected: !registro.nota },
-            ...[1, 2, 3, 4, 5].map((n) => ({
-              value: String(n),
-              name: String(n),
-              isSelected: registro.nota === n,
-            })),
-          ],
+  <div class="page max-w-[760px]">
+    <h1 class="mb-7 font-display text-2xl sm:text-[28px]">
+      {{ review ? 'Editar review' : 'Escrever review' }}
+    </h1>
+
+    <div class="flex flex-col">
+      <span class="aba">Ficha de review</span>
+      <div class="box p-5 sm:p-7">
+        <h2 class="text-lg font-bold break-words">
+          @link({
+            route: 'videos.show',
+            routeParams: { id: registro.video.id },
+            class: 'hover:text-rosa hover:underline underline-offset-[3px]',
+          })
+            {{ registro.video.titulo }}
+          @end
+        </h2>
+        <p class="mt-1 font-mono text-sm text-apagado">
+          {{ `Assistido em ${registro.dataAssistido.toFormat('dd/MM/yyyy')}` }}
+        </p>
+        @form({
+          route: 'reviews.store',
+          routeParams: { id: registro.id },
+          method: 'POST',
+          class: 'mt-6 flex flex-col gap-5',
         })
-        @!field.error()
-      @end
-      @field.root({ name: 'texto' })
-        @!field.label({ text: 'Review' })
-        @!textarea.control({
-          rows: 8,
-          maxlength: 5000,
-          value: review ? review.texto : '',
-        })
-        @!field.error()
-      @end
-      @!button({ text: review ? 'Salvar' : 'Publicar', type: 'submit' })
-    @end
+          @field.root({ name: 'nota' })
+            @!notaPicker({ valor: old('nota') || (registro.nota ?? '') })
+            @!field.error()
+          @end
+          @field.root({ name: 'texto' })
+            @!field.label({ text: 'Review' })
+            @!textarea.control({
+              rows: 8,
+              maxlength: 5000,
+              class: 'pautado',
+              value: review ? review.texto : '',
+            })
+            @!field.error()
+          @end
+
+          <div class="flex flex-wrap items-center gap-x-5 gap-y-3">
+            @!button({
+              text: review ? 'Salvar' : 'Publicar',
+              type: 'submit',
+              class: 'mb-0',
+            })
+            @link({
+              route: 'videos.show',
+              routeParams: { id: registro.video.id },
+              class: 'il',
+            })
+              Voltar ao vídeo
+            @end
+          </div>
+        @end
+      </div>
+    </div>
     @if(review)
-      @form({ route: 'reviews.destroy', routeParams: { id: review.id }, method: 'POST' })
-        @!button({ text: 'Excluir review', type: 'submit' })
+      @form({
+        route: 'reviews.destroy',
+        routeParams: { id: review.id },
+        method: 'POST',
+        class: 'mt-8',
+      })
+        @!button({
+          text: 'Excluir review',
+          type: 'submit',
+          variant: 'secondary',
+          size: 'sm',
+        })
       @end
     @end
-  @end
+  </div>
 @end
