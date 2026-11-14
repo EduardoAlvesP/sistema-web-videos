@@ -1,45 +1,53 @@
-@layouts.auth()
-  <h1 class="auth__title">Bem-vindo de volta</h1>
-  <p class="auth__sub">Entre para continuar.</p>
-  @form({
-    route: 'session.store',
-    method: 'POST',
-    class: 'auth__form',
-    'x-data': '{ submitting: false }',
-    'x-on:submit': 'submitting = true',
-  })
-    @field.root({ name: 'email' })
-      @!field.label({ text: 'E-mail' })
-      @!input.control({
-        type: 'email',
-        autocomplete: 'username',
-        placeholder: 'voce@exemplo.com',
-      })
-      @!field.error()
-    @end
-    @field.root({ name: 'password' })
-      @!field.label({ text: 'Senha' })
-      @!input.control({
-        type: 'password',
-        autocomplete: 'current-password',
-        placeholder: '••••••••',
-      })
-      @!field.error()
-    @end
-    @!button({
-      text: 'Entrar',
-      type: 'submit',
-      block: true,
-      style: 'margin-top: 4px;',
-      'x-bind:disabled': 'submitting',
-      'x-text': "submitting ? 'Um momento…' : 'Entrar'",
-    })
-  @end
+@layouts.auth({ title: 'Entrar' })
+  <div class="w-full max-w-[448px]">
+    <div class="flex flex-col">
+      <span class="aba">Acesso</span>
+      <div class="box p-5 sm:p-7">
+        <h1 class="font-display text-[26px] leading-tight sm:text-[30px]">Bem-vindo de volta</h1>
+        @form({
+          route: 'session.store',
+          method: 'POST',
+          class: 'mt-6 flex flex-col gap-5',
+          'x-data': '{ submitting: false }',
+          'x-on:submit': 'submitting = true',
+        })
+          @field.root({ name: 'email' })
+            @!field.label({ text: 'E-mail' })
+            @!input.control({
+              type: 'email',
+              autocomplete: 'username',
+              placeholder: 'voce@exemplo.com',
+            })
+            @!field.error()
+          @end
+          @field.root({ name: 'password' })
+            @!field.label({ text: 'Senha' })
+            @!input.control({
+              type: 'password',
+              autocomplete: 'current-password',
+              placeholder: '••••••••',
+            })
+            @!field.error()
+          @end
+          @!button({
+            text: 'Entrar',
+            type: 'submit',
+            block: true,
+            class: 'mt-2',
+            'x-bind:disabled': 'submitting',
+            'x-text': "submitting ? 'Um momento…' : 'Entrar'",
+          })
+        @end
+      </div>
+    </div>
 
-  <p class="auth__foot">
-    Ainda não tem conta?
-    @link({ route: 'new_account.create', class: 'il' })
-      Criar conta
-    @end
-  </p>
+    <p class="mt-8 text-center">
+      
+      Ainda não tem conta?
+
+      @link({ route: 'new_account.create', class: 'il' })
+        Criar conta
+      @end
+    </p>
+  </div>
 @end
