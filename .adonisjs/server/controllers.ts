@@ -10,6 +10,7 @@ export const controllers = {
   },
   NewAccount: () => import('#controllers/new_account_controller'),
   Registros: () => import('#controllers/registros_controller'),
+  Reviews: () => import('#controllers/reviews_controller'),
   Session: () => import('#controllers/session_controller'),
   Videos: () => import('#controllers/videos_controller'),
 }

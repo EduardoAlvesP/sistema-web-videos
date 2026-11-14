@@ -18,7 +18,7 @@ Tamanhos: P = 1,5 dia-pessoa · M = 4 · P/M = 2,75. Sprint = 2 semanas = 10 dia
 | T10 | 1 | Fase 1 | Buscar vídeos (busca local por título) | M | Enviar vídeo | Concluído | Só banco local; busca de canal fica para o Sprint 2 |
 | T11 | 2 | Fase 1 | Marcar como assistido | P | Detalhar vídeo | Concluído | Cria Registro com data_assistido |
 | T12 | 2 | Fase 1 | Watchlist: adicionar/remover | P | Detalhar vídeo | A fazer | Decidir antes: `status` no Registro ou tabela própria |
-| T13 | 2 | Fase 1 | Review: criar/editar/deletar | M | Marcar como assistido | A fazer | Vinculada ao Registro, com nota e texto |
+| T13 | 2 | Fase 1 | Review: criar/editar/deletar | M | Marcar como assistido | Concluído | Vinculada ao Registro, com nota e texto. Listagem simples na tela do vídeo já existe; filtro amigos = T17 |
 | T14 | 2 | Fase 1 | Perfil: editar e visualizar | P | Cadastro e login | A fazer | Foto, bio e listagens básicas |
 | T15 | 2 | Fase 1 | Seguir/deixar de seguir + listar seguidores/seguindo | P | Cadastro e login | A fazer | Destrava o filtro 'amigos' do Sprint 3 |
 | T16 | 2 | Fase 1 | Busca de canal | M | Entidade Canal | A fazer | Exige a entidade Canal no schema |

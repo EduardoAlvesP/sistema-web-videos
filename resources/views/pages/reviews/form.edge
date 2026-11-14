@@ -1,0 +1,42 @@
+@layouts.app({ title: review ? 'Editar review' : 'Escrever review' })
+  @page()
+    <h1>{{ review ? 'Editar review' : 'Escrever review' }}</h1>
+    <p>
+      @link({ route: 'videos.show', routeParams: { id: registro.video.id } })
+        {{ registro.video.titulo }}
+      @end
+    </p>
+    <p>{{ `Assistido em ${registro.dataAssistido.toFormat('dd/MM/yyyy')}` }}</p>
+    @form({ route: 'reviews.store', routeParams: { id: registro.id }, method: 'POST' })
+      @field.root({ name: 'nota' })
+        @!field.label({ text: 'Nota' })
+        @!select.control({
+          options: [
+            { value: '', name: 'Sem nota', isSelected: !registro.nota },
+            ...[1, 2, 3, 4, 5].map((n) => ({
+              value: String(n),
+              name: String(n),
+              isSelected: registro.nota === n,
+            })),
+          ],
+        })
+        @!field.error()
+      @end
+      @field.root({ name: 'texto' })
+        @!field.label({ text: 'Review' })
+        @!textarea.control({
+          rows: 8,
+          maxlength: 5000,
+          value: review ? review.texto : '',
+        })
+        @!field.error()
+      @end
+      @!button({ text: review ? 'Salvar' : 'Publicar', type: 'submit' })
+    @end
+    @if(review)
+      @form({ route: 'reviews.destroy', routeParams: { id: review.id }, method: 'POST' })
+        @!button({ text: 'Excluir review', type: 'submit' })
+      @end
+    @end
+  @end
+@end

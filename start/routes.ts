@@ -44,6 +44,19 @@ router
       .post('registros/:id/excluir', [controllers.Registros, 'destroy'])
       .where('id', router.matchers.number())
       .as('registros.destroy')
+
+    router
+      .get('registros/:id/review', [controllers.Reviews, 'edit'])
+      .where('id', router.matchers.number())
+      .as('reviews.edit')
+    router
+      .post('registros/:id/review', [controllers.Reviews, 'store'])
+      .where('id', router.matchers.number())
+      .as('reviews.store')
+    router
+      .post('reviews/:id/excluir', [controllers.Reviews, 'destroy'])
+      .where('id', router.matchers.number())
+      .as('reviews.destroy')
   })
   .use(middleware.auth())
 

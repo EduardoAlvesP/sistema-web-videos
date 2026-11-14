@@ -1,11 +1,13 @@
 import Registro from '#models/registro'
+import Review from '#models/review'
 import Video from '#models/video'
 import { registroValidator } from '#validators/registro'
 import type { HttpContext } from '@adonisjs/core/http'
+import db from '@adonisjs/lucid/services/db'
 import { DateTime } from 'luxon'
 
 /**
- * RegistrosController: marcar vídeo como assistido (T11).
+ * RegistrosController: marcar vídeo como assistido (T11), com review opcional (T13).
  */
 export default class RegistrosController {
   /**
@@ -14,16 +16,29 @@ export default class RegistrosController {
    */
   async store({ params, request, response, auth, session }: HttpContext) {
     const video = await Video.findOrFail(params.id)
-    const { data_assistido: data, nota } = await request.validateUsing(registroValidator)
+    const {
+      data_assistido: data,
+      nota,
+      review: texto,
+    } = await request.validateUsing(registroValidator)
 
-    await Registro.create({
-      userId: auth.getUserOrFail().id,
-      videoId: video.id,
-      dataAssistido: data ?? DateTime.now(),
-      nota: nota ?? null,
+    // T13: campo "Review" preenchido -> registro + review na mesma transação
+    await db.transaction(async (trx) => {
+      const registro = await Registro.create(
+        {
+          userId: auth.getUserOrFail().id,
+          videoId: video.id,
+          dataAssistido: data ?? DateTime.now(),
+          nota: nota ?? null,
+        },
+        { client: trx }
+      )
+      if (texto) {
+        await Review.create({ registroId: registro.id, texto }, { client: trx })
+      }
     })
 
-    session.flash('success', 'Registrado!')
+    session.flash('success', texto ? 'Registrado! Review publicada!' : 'Registrado!')
     return response.redirect().toRoute('videos.show', { id: video.id })
   }
 

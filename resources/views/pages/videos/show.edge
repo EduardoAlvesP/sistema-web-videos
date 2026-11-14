@@ -41,6 +41,9 @@
           @each(registro in meusRegistros)
             <li>
               {{ `${registro.dataAssistido.toFormat('dd/MM/yyyy')} — ${registro.nota ? `nota ${registro.nota}` : 'sem nota'}` }}
+              @link({ route: 'reviews.edit', routeParams: { id: registro.id } })
+                {{ registro.review ? 'Editar review' : 'Escrever review' }}
+              @end
               @form({
                 route: 'registros.destroy',
                 routeParams: { id: registro.id },
@@ -73,6 +76,11 @@
           })
           @!field.error()
         @end
+        @field.root({ name: 'review' })
+          @!field.label({ text: 'Review (opcional)' })
+          @!textarea.control({ rows: 4, maxlength: 5000 })
+          @!field.error()
+        @end
         @!button({ text: 'Marcar como assistido', type: 'submit' })
       @end
     @end
@@ -86,7 +94,34 @@
       @end
     @end
     @section({ title: 'Reviews' })
-      <p>Em breve</p>
+      @if(reviews.length)
+        <ul>
+          @each(review in reviews)
+            <li>
+              <p>
+                <strong>{{ review.registro.user.nome }}</strong>
+                {{ ` — ${review.registro.nota ? `nota ${review.registro.nota}` : 'sem nota'} — ${review.registro.dataAssistido.toFormat('dd/MM/yyyy')}` }}
+              </p>
+              <p style="white-space: pre-line;">{{ review.texto }}</p>
+              @if(review.registro.userId === auth.user.id)
+                @link({ route: 'reviews.edit', routeParams: { id: review.registroId } })
+                  Editar
+                @end
+                @form({
+                  route: 'reviews.destroy',
+                  routeParams: { id: review.id },
+                  method: 'POST',
+                  style: 'display: inline;',
+                })
+                  @!button({ text: 'Excluir', type: 'submit' })
+                @end
+              @end
+            </li>
+          @end
+        </ul>
+      @else
+        <p>Ninguém escreveu uma review ainda.</p>
+      @end
     @end
     @section({ title: 'Tags' })
       @if(video.tags.length)

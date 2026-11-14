@@ -1,4 +1,5 @@
 import Registro from '#models/registro'
+import Review from '#models/review'
 import Video from '#models/video'
 import YoutubeClient, { VideoNaoEncontradoError } from '#services/youtube_client'
 import { enviarVideo } from '#services/video_service'
@@ -86,6 +87,15 @@ export default class VideosController {
       .where('user_id', auth.getUserOrFail().id)
       .orderBy('data_assistido', 'desc')
       .orderBy('id', 'desc')
+      .preload('review')
+
+    // T13: reviews de todos os usuários do vídeo, mais recentes primeiro
+    // (filtro amigos/todos fica para a T17)
+    const reviews = await Review.query()
+      .whereHas('registro', (q) => q.where('video_id', video.id))
+      .preload('registro', (q) => q.preload('user'))
+      .orderBy('created_at', 'desc')
+      .orderBy('id', 'desc')
 
     const media = await Registro.query()
       .where('video_id', video.id)
@@ -99,6 +109,7 @@ export default class VideosController {
     return view.render('pages/videos/show', {
       video,
       meusRegistros,
+      reviews,
       notaMedia,
       totalNotas,
       hoje: DateTime.now().toISODate(),
