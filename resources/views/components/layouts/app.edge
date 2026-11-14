@@ -6,7 +6,7 @@
 @let(nav = [
   { label: 'Vídeos', route: 'videos.index', inativoEm: ['videos.create'] },
   { label: 'Enviar vídeo', route: 'videos.create', exact: true },
-  { label: 'Dashboard', route: 'dashboard', exact: true },
+  { label: 'Perfil', route: 'dashboard', exact: true },
   ...(auth.user?.papel === 'admin' ? [{ label: 'Admin', route: 'admin.videos.index' }] : []),
 ])
 @let(pageTitle = $props.get('title'))
